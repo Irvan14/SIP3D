@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Login - SIP3D</title>
+
+<link rel="icon" type="image/png" href="logo.png">
+<link rel="stylesheet" href="css/login.css">
+
+</head>
+
+<body>
+
+<div class="login-container" id="loginBox">
+  <h2>SIP3D LOGIN</h2>
+
+  <div class="input-group">
+    <input type="email" id="email" placeholder="Email" required>
+  </div>
+
+  <div class="input-group">
+    <input type="password" id="password" placeholder="Password" required>
+    <span class="toggle-password" onclick="togglePassword()">👁</span>
+  </div>
+
+  <button id="loginBtn" onclick="login()">Login</button>
+  <div id="errorMsg" class="error"></div>
+</div>
+
+<script>
+const API_URL = "https://script.google.com/macros/s/AKfycbziTjfC3Sh0jor3rLIeUkseqQ6EUIfNjDorS8WQsSuiVsbgH27N0VyO822ezRlz_X-RQw/exec";
+
+// Auto redirect kalau sudah login
+if (localStorage.getItem("sip3d_user")) {
+  window.location.href = "index.html";
+}
+
+function togglePassword() {
+  const input = document.getElementById("password");
+  input.type = input.type === "password" ? "text" : "password";
+}
+
+document.addEventListener("keydown", function(e){
+  if(e.key === "Enter"){
+    login();
+  }
+});
+
+async function login() {
+
+  const email = document.getElementById("email").value.trim();
+  const password = document.getElementById("password").value.trim();
+  const errorMsg = document.getElementById("errorMsg");
+  const button = document.getElementById("loginBtn");
+  const box = document.getElementById("loginBox");
+
+  errorMsg.textContent = "";
+
+  button.disabled = true;
+  button.innerHTML = `<span class="spinner"></span> Memproses...`;
+
+  try {
+
+    const response = await fetch(API_URL, {
+      method:"POST",
+      headers:{ "Content-Type":"text/plain" },
+      body:JSON.stringify({
+        mode:"login",
+        email:email,
+        password:password
+      })
+    });
+
+    const result = await response.json();
+
+    if(result.status === "success"){
+
+      localStorage.setItem("sip3d_user", JSON.stringify(result));
+
+      button.innerHTML = "Berhasil ✓";
+      setTimeout(()=>{
+        window.location.href = "index.html";
+      },800);
+
+    } else {
+
+      errorMsg.textContent = "Email atau password salah";
+      box.classList.add("shake");
+      setTimeout(()=> box.classList.remove("shake"),400);
+      button.disabled = false;
+      button.innerHTML = "Login";
+    }
+
+  } catch(err){
+    errorMsg.textContent = "Server tidak merespon";
+    button.disabled = false;
+    button.innerHTML = "Login";
+  }
+}
+</script>
+
+</body>
+</html>

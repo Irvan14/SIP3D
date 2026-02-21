@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Data Kegiatan - SIP3D</title>
+
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link rel="stylesheet" href="css/layout.css">
+  <link rel="stylesheet" href="css/theme.css">
+  <link rel="stylesheet" href="css/kegiatan.css">
+  <link rel="icon" type="image/png" href="logo.png">
+</head>
+
+<body>
+<script src="auth.js"></script>
+<script>
+const user = JSON.parse(localStorage.getItem("sip3d_user"));
+if (!user) {
+  window.location.href = "login.html";
+}
+</script>
+
+<div class="overlay" id="overlay" onclick="closeSidebarMobile()"></div>
+
+<div class="container">
+
+  <aside class="sidebar" id="sidebar">
+    <div class="logo-section">
+      <img src="logo.png">
+      <h2 class="logo-text">SIP3D</h2>
+    </div>
+
+    <ul>
+      <li><a href="index.html"><i class="fas fa-chart-line"></i><span>Dashboard</span></a></li>
+      <li class="active"><a href="kegiatan.html"><i class="fas fa-list"></i><span>Data Kegiatan</span></a></li>
+      <li><a href="input.html"><i class="fas fa-plus-circle"></i><span>Input Kegiatan</span></a></li>
+      <li><a href="#"><i class="fas fa-folder-open"></i><span>Dokumen Perda</span></a></li>
+    </ul>
+  </aside>
+
+  <main class="main-content">
+
+    <div class="topbar">
+      <button class="toggle-btn" onclick="toggleSidebar()">
+        <i class="fas fa-bars"></i>
+      </button>
+      <h1>Data Kegiatan</h1>
+       <div style="margin-left:auto; display:flex; gap:15px; align-items:center;">
+    <span id="loggedUser"></span>
+    <button onclick="logout()">Logout</button>
+  </div>
+    </div>
+
+    <div class="filter-bar">
+
+  <input type="text" id="searchInput" placeholder="Cari lokasi / tim..." />
+
+  <select id="filterJenis">
+    <option value="">Semua Jenis</option>
+    <option value="Yustisi">Yustisi</option>
+    <option value="Non Yustisi">Non Yustisi</option>
+  </select>
+
+  <input type="month" id="filterBulan" />
+
+</div>
+
+    <div class="table-container">
+
+      <table id="kegiatanTable">
+        <thead>
+          <tr>
+            <th>Tanggal</th>
+            <th>Jenis</th>
+            <th>Lokasi</th>
+            <th>Tim</th>
+            <th>Dokumentasi</th>
+            <th>Berita Acara</th>
+            <th>Input Oleh</th>
+          </tr>
+        </thead>
+        <tbody>
+        </tbody>
+      </table>
+      <div class="pagination">
+  <button id="prevPage">Prev</button>
+  <span id="pageInfo"></span>
+  <button id="nextPage">Next</button>
+
+  <select id="rowsPerPage">
+    <option value="5">5</option>
+    <option value="10" selected>10</option>
+    <option value="20">20</option>
+    <option value="50">50</option>
+  </select>
+</div>
+
+    </div>
+
+  </main>
+
+</div>
+
+<script>
+let currentPage = 1;
+let rowsPerPage = 10;
+let allData = [];
+const API_URL = "https://script.google.com/macros/s/AKfycbziTjfC3Sh0jor3rLIeUkseqQ6EUIfNjDorS8WQsSuiVsbgH27N0VyO822ezRlz_X-RQw/exec";
+
+const overlay = document.getElementById("overlay");
+
+function closeSidebarMobile() {
+  sidebar.classList.remove("mobile-open");
+  overlay.classList.remove("active");
+}
+
+/* ================= LOAD DATA ================= */
+
+async function loadData() {
+  try {
+    const response = await fetch(API_URL);
+    const data = await response.json();
+
+    const tableBody = document.querySelector("#kegiatanTable tbody");
+    tableBody.innerHTML = "";
+
+    allData = data.sort((a, b) => new Date(b[1]) - new Date(a[1]));
+    renderTable(allData);
+
+
+  } catch (error) {
+    console.error("Gagal mengambil data:", error);
+  }
+}
+
+loadData();
+function renderTable(data) {
+
+  const tbody = document.querySelector("#kegiatanTable tbody");
+  tbody.innerHTML = "";
+
+  const start = (currentPage - 1) * rowsPerPage;
+  const end = start + rowsPerPage;
+
+  const paginatedItems = data.slice(start, end);
+
+  paginatedItems.forEach(row => {
+
+    const tr = document.createElement("tr");
+
+    tr.innerHTML = `
+      <td>${row[1]}</td>
+      <td>${row[2]}</td>
+      <td>${row[3]}</td>
+      <td>${row[5]}</td>
+      <td>${row[6] ? `<img src="https://drive.google.com/thumbnail?id=${row[6].split('/d/')[1].split('/')[0]}" width="60">`: "-"}</td>
+      <td>${row[7] ? `<a href="${row[7]}" target="_blank">Lihat</a>` : "-"}</td>
+      <td>${row[8]}</td>
+    `;
+
+    tbody.appendChild(tr);
+  });
+
+  updatePaginationInfo(data.length);
+}
+
+function updatePaginationInfo(totalItems) {
+
+  const totalPages = Math.ceil(totalItems / rowsPerPage);
+
+  document.getElementById("pageInfo").textContent =
+    `Page ${currentPage} of ${totalPages}`;
+
+  document.getElementById("prevPage").disabled =
+    currentPage === 1;
+
+  document.getElementById("nextPage").disabled =
+    currentPage === totalPages;
+}
+
+function applyFilter() {
+  const search = document.getElementById("searchInput").value.toLowerCase();
+  const jenis = document.getElementById("filterJenis").value;
+  const bulan = document.getElementById("filterBulan").value;
+
+  let filtered = allData.filter(row => {
+
+    const tanggal = row[1];
+    const jenisRow = row[2];
+    const lokasi = row[3].toLowerCase();
+    const tim = row[5].toLowerCase();
+
+    const matchSearch =
+      lokasi.includes(search) ||
+      tim.includes(search);
+
+    const matchJenis =
+      jenis === "" || jenisRow === jenis;
+
+    const matchBulan =
+      bulan === "" || tanggal.startsWith(bulan);
+
+    return matchSearch && matchJenis && matchBulan;
+  });
+
+  renderTable(filtered);
+}
+
+document.getElementById("searchInput").addEventListener("input", applyFilter);
+document.getElementById("filterJenis").addEventListener("change", applyFilter);
+document.getElementById("filterBulan").addEventListener("change", applyFilter);
+
+// AUTO REFRESH tiap 10 detik
+setInterval(() => {
+  loadData();
+}, 10000);
+
+// ==== PAGINATION BUTTONS ====
+
+document.getElementById("prevPage").addEventListener("click", () => {
+  if (currentPage > 1) {
+    currentPage--;
+    renderTable(allData);
+  }
+});
+
+document.getElementById("nextPage").addEventListener("click", () => {
+  const totalPages = Math.ceil(allData.length / rowsPerPage);
+  if (currentPage < totalPages) {
+    currentPage++;
+    renderTable(allData);
+  }
+});
+
+document.getElementById("rowsPerPage").addEventListener("change", (e) => {
+  rowsPerPage = parseInt(e.target.value);
+  currentPage = 1;
+  renderTable(allData);
+});
+
+</script>
+<script src="layout.js"></script>
+<script>
+function logout() {
+  localStorage.removeItem("sip3d_user");
+  window.location.href = "login.html";
+}
+</script>
+</body>
+</html>
