@@ -39,65 +39,100 @@ if (!user) {
     </ul>
   </aside>
 
-  <main class="main-content">
+  <main class="main-content page-wrapper">
 
     <div class="topbar">
       <button class="toggle-btn" onclick="toggleSidebar()">
         <i class="fas fa-bars"></i>
       </button>
       <h1>Input Kegiatan</h1>
-       <div style="margin-left:auto; display:flex; gap:15px; align-items:center;">
+       <div class="profile-dropdown">
+  <div class="profile-trigger" onclick="toggleProfile(event)">
+    <i class="fas fa-user-circle"></i>
     <span id="loggedUser"></span>
-    <button onclick="logout()">Logout</button>
+    <i class="fas fa-chevron-down"></i>
   </div>
+
+  <div class="profile-menu" id="profileMenu">
+    <a href="#" onclick="logout()">
+      <i class="fas fa-sign-out-alt"></i> Logout
+    </a>
+  </div>
+</div>
     </div>
 
    <div class="form-card">
 
   <form id="kegiatanForm">
 
-    <div class="form-group full">
-      <label>Tanggal</label>
-      <input type="date" name="tanggal" required>
+    <!-- ===== SECTION 1 ===== -->
+    <div class="form-section">
+      <h3>Informasi Kegiatan</h3>
+
+      <div class="form-grid">
+
+        <div class="form-group">
+          <input type="date" name="tanggal" required>
+          <label>Tanggal</label>
+        </div>
+
+        <div class="form-group">
+          <select name="jenis" required>
+            <option value="" disabled selected hidden></option>
+            <option value="Yustisi">Yustisi</option>
+            <option value="Non Yustisi">Non Yustisi</option>
+          </select>
+          <label>Jenis Kegiatan</label>
+        </div>
+
+        <div class="form-group">
+          <input type="text" name="lokasi" required>
+          <label>Lokasi</label>
+        </div>
+
+        <div class="form-group">
+          <input type="text" name="tim" required>
+          <label>Tim Pelaksana</label>
+        </div>
+
+        <div class="form-group full">
+          <textarea name="uraian" required></textarea>
+          <label>Uraian Kegiatan</label>
+        </div>
+
+      </div>
     </div>
 
-    <div class="form-group">
-      <label>Jenis Kegiatan</label>
-      <select name="jenis" required>
-        <option value="">Pilih Jenis</option>
-        <option value="Yustisi">Yustisi</option>
-        <option value="Non Yustisi">Non Yustisi</option>
-      </select>
-    </div>
+    <!-- ===== SECTION 2 ===== -->
+    <div class="form-section">
+      <h3>Dokumentasi</h3>
 
-    <div class="form-group">
-      <label>Lokasi</label>
-      <input type="text" name="lokasi" placeholder="Contoh: Pasar Kroya" required>
+      <div class="upload-box" id="uploadBox">
+        <i class="fas fa-cloud-upload-alt"></i>
+        <p>Drag & Drop Foto atau Klik untuk Upload</p>
+        <input type="file" id="fileInput" accept="image/*">
+      </div>
     </div>
-
-    <div class="form-group">
-      <label>Tim Pelaksana</label>
-      <input type="text" name="tim" required>
-    </div>
-
-    <div class="form-group full">
-      <label>Uraian Kegiatan</label>
-      <textarea name="uraian" required></textarea>
-    </div>
-
-    <div class="form-group full">
-  <label>Upload Dokumentasi (Foto)</label>
-  <input type="file" id="fileInput" accept="image/*">
-</div>
 
     <button type="submit" class="submit-btn">
       <i class="fas fa-save"></i> Simpan Data
     </button>
 
   </form>
-
 </div>
+
 <div id="toast" class="toast"></div>
+<div id="successOverlay" class="success-overlay">
+  <div class="success-box">
+    <div class="checkmark">
+      <div class="checkmark-circle"></div>
+      <div class="checkmark-stem"></div>
+      <div class="checkmark-kick"></div>
+    </div>
+    <h2>Berhasil Disimpan!</h2>
+    <p>Data kegiatan telah masuk ke sistem.</p>
+  </div>
+</div>
 
   </main>
 
@@ -214,9 +249,16 @@ const response = await fetch(API_URL, {
       const result = await response.json();
 
       if (result.status === "success") {
-        showToast("Data berhasil disimpan ✅", "success");
-        form.reset();
-      } else {
+
+  form.reset();
+
+  const overlay = document.getElementById("successOverlay");
+  overlay.classList.add("active");
+
+  setTimeout(() => {
+    overlay.classList.remove("active");
+  }, 2500);
+} else {
         showToast("Gagal menyimpan data ❌", "error");
       }
 

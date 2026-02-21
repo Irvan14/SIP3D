@@ -51,17 +51,26 @@ if (!user) {
     </ul>
   </aside>
 
-  <main class="main-content">
+  <main class="main-content page-wrapper">
 
     <div class="topbar">
       <button class="toggle-btn" onclick="toggleSidebar()">
         <i class="fas fa-bars"></i>
       </button>
       <h1>Dashboard Statistik</h1>
-       <div style="margin-left:auto; display:flex; gap:15px; align-items:center;">
+       <div class="profile-dropdown">
+  <div class="profile-trigger" onclick="toggleProfile(event)">
+    <i class="fas fa-user-circle"></i>
     <span id="loggedUser"></span>
-    <button onclick="logout()">Logout</button>
+    <i class="fas fa-chevron-down"></i>
   </div>
+
+  <div class="profile-menu" id="profileMenu">
+    <a href="#" onclick="logout()">
+      <i class="fas fa-sign-out-alt"></i> Logout
+    </a>
+  </div>
+</div>
     </div>
 
    <div class="cards">
@@ -295,5 +304,6 @@ loadDashboard();
 setInterval(refreshData, 10000);
 
 </script>
+<script src="layout.js"></script>
 </body>
 </html>
