@@ -1,0 +1,131 @@
+
+
+/* ===== Card Wrapper ===== */
+.form-card {
+  background: white;
+  padding: 40px 60px;
+  border-radius: 16px;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.06);
+  width: 100%;
+  margin-top: 20px;
+}
+
+
+/* ===== Grid Layout ===== */
+#kegiatanForm {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 25px 40px;
+}
+
+/* Full width */
+.form-group.full {
+  grid-column: 1 / -1;
+}
+
+/* Label */
+.form-group label {
+  margin-bottom: 6px;
+  font-weight: 500;
+}
+
+/* Input Style */
+.form-group input,
+.form-group select,
+.form-group textarea {
+  width: 100%;
+  padding: 12px 14px;
+  border-radius: 8px;
+  border: 1px solid #d9e0ef;
+  font-size: 14px;
+  background: #f9fbff;
+  transition: 0.2s;
+}
+
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus {
+  outline: none;
+  border-color: #0b3d91;
+  box-shadow: 0 0 0 2px rgba(11,61,145,0.1);
+}
+
+textarea {
+  resize: vertical;
+  min-height: 160px;
+}
+
+/* Button */
+.submit-btn {
+  grid-column: 1 / -1;
+  background: linear-gradient(135deg, #0b3d91, #062a63);
+  color: white;
+  border: none;
+  padding: 14px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: 0.2s;
+}
+
+.submit-btn:hover {
+  transform: translateY(-2px);
+}
+
+/* ===== Toast Notification ===== */
+.toast {
+  position: fixed;
+  top: 30px;
+  right: 30px;
+  background: #0b3d91;
+  color: white;
+  padding: 14px 22px;
+  border-radius: 10px;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+  opacity: 0;
+  transform: translateY(-20px);
+  transition: all 0.3s ease;
+  z-index: 9999;
+}
+
+.toast.show {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.toast.success {
+  background: #1e7e34;
+}
+
+.toast.error {
+  background: #c82333;
+}
+
+/* Spinner */
+.spinner {
+  width: 16px;
+  height: 16px;
+  border: 2px solid white;
+  border-top: 2px solid transparent;
+  border-radius: 50%;
+  display: inline-block;
+  margin-right: 8px;
+  animation: spin 0.6s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.form-group label {
+  font-size: 13px;
+  color: var(--text-light);
+}
+
+.form-card {
+  transition: var(--transition);
+}
+
+.form-card:hover {
+  box-shadow: var(--shadow-hover);
+}
