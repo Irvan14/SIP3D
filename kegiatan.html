@@ -104,3 +104,109 @@ href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
 
 </body>
 </html>
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Data Kegiatan - SIP3D</title>
+
+<link rel="icon" href="logo.png">
+
+<link rel="stylesheet" href="css/layout.css">
+<link rel="stylesheet" href="css/theme.css">
+<link rel="stylesheet" href="css/kegiatan.css">
+
+<link rel="stylesheet"
+href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+</head>
+
+<body>
+
+<script src="js/auth.js"></script>
+
+<div class="overlay" id="overlay" onclick="closeSidebarMobile()"></div>
+
+<div class="container">
+
+<div id="sidebar"></div>
+
+<main class="main-content page-wrapper">
+
+<div id="topbar"></div>
+
+<div class="filter-bar">
+
+<input type="text" id="searchInput" placeholder="Cari lokasi / tim">
+
+<select id="filterJenis">
+<option value="">Semua Jenis</option>
+<option value="Yustisi">Yustisi</option>
+<option value="Non Yustisi">Non Yustisi</option>
+</select>
+
+<input type="month" id="filterBulan">
+
+</div>
+
+<div class="table-container">
+
+<table id="kegiatanTable">
+
+<thead>
+
+<tr>
+
+<th>Tanggal</th>
+<th>Jenis</th>
+<th>Lokasi</th>
+<th>Tim</th>
+<th>Dokumentasi</th>
+<th>Berkas</th>
+<th>Input</th>
+
+</tr>
+
+</thead>
+
+<tbody></tbody>
+
+</table>
+
+<div class="pagination">
+
+<button id="prevPage">Prev</button>
+
+<span id="pageInfo"></span>
+
+<button id="nextPage">Next</button>
+
+<select id="rowsPerPage">
+<option value="5">5</option>
+<option value="10" selected>10</option>
+<option value="20">20</option>
+<option value="50">50</option>
+</select>
+
+</div>
+
+</div>
+
+</main>
+
+</div>
+
+<div id="bottomnav"></div>
+
+<script src="js/api.js"></script>
+<script src="js/layout.js"></script>
+<script src="js/loader.js"></script>
+<script src="js/script.js"></script>
+<script src="js/router.js"></script>
+
+</body>
+</html>
