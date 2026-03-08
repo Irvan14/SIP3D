@@ -1,0 +1,266 @@
+/* ====== RESET ====== */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Inter', 'Segoe UI', sans-serif;
+}
+
+body {
+  background-color: #f1f4f9;
+  color: #2c3e50;
+  overflow-x: hidden;
+}
+
+.container {
+  display: flex;
+  min-height: 100vh;
+}
+
+/* ====== OVERLAY ====== */
+.overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.4);
+  opacity: 0;
+  visibility: hidden;
+  transition: 0.3s ease;
+  z-index: 998;
+}
+
+.overlay.active {
+  opacity: 1;
+  visibility: visible;
+}
+
+/* ====== SIDEBAR ====== */
+.sidebar {
+  width: 260px;
+  color: white;
+  padding: 30px 20px;
+  display: flex;
+  flex-direction: column;
+  transition: all 0.35s cubic-bezier(.4,0,.2,1);
+  z-index: 999;
+}
+
+.sidebar.collapsed {
+  width: 85px;
+}
+
+.logo-section {
+  text-align: center;
+  margin-bottom: 40px;
+}
+
+.logo-section img {
+  width: 60px;
+  margin-bottom: 10px;
+}
+
+.logo-text {
+  transition: opacity 0.3s;
+}
+
+.sidebar.collapsed .logo-text {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.sidebar ul {
+  list-style: none;
+  flex: 1;
+}
+
+.sidebar ul li {
+  margin-bottom: 12px;
+}
+
+.sidebar ul li a {
+  text-decoration: none;
+  color: white;
+  padding: 12px 15px;
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  border-radius: 10px;
+  transition: 0.3s ease;
+}
+
+.sidebar ul li.active a,
+.sidebar ul li a:hover {
+  background: rgba(255,255,255,0.15);
+}
+
+/* ====== MAIN ====== */
+.main-content {
+  flex: 1;
+  padding: 40px;
+}
+
+.topbar {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  margin-bottom: 35px;
+}
+
+.toggle-btn {
+  background: white;
+  border: none;
+  padding: 10px 15px;
+  border-radius: 10px;
+  cursor: pointer;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+}
+
+/* ====== TABLE ====== */
+.table-container {
+  background: white;
+  padding: 30px;
+  border-radius: 16px;
+  box-shadow: 0 8px 25px rgba(0,0,0,0.06);
+}
+
+.table-header {
+  margin-bottom: 20px;
+}
+
+.table-header input {
+  padding: 10px 15px;
+  width: 250px;
+  border-radius: 10px;
+  border: 1px solid #ddd;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+table th, table td {
+  padding: 12px;
+  text-align: center;
+}
+
+table th {
+  background: #f4f6fb;
+  color: #0b3d91;
+}
+
+table tr:nth-child(even) {
+  background: #f9fbff;
+}
+
+/* ====== PAGINATION ====== */
+.pagination {
+  margin-top: 20px;
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.pagination button {
+  padding: 8px 15px;
+  border-radius: 8px;
+  border: none;
+  background: #0b3d91;
+  color: white;
+  cursor: pointer;
+}
+
+/* ===== FILTER BAR ===== */
+.filter-bar {
+  display: flex;
+  gap: 15px;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+}
+
+.filter-bar input,
+.filter-bar select {
+  padding: 10px 14px;
+  border-radius: 8px;
+  border: 1px solid #d9e0ef;
+  background: #f9fbff;
+  font-size: 14px;
+}
+
+.filter-bar input:focus,
+.filter-bar select:focus {
+  outline: none;
+  border-color: #0b3d91;
+}
+
+/* ===== PAGINATION ===== */
+.pagination {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 20px;
+  gap: 15px;
+}
+
+.pagination button {
+  padding: 8px 14px;
+  border-radius: 8px;
+  border: none;
+  background: #0b3d91;
+  color: white;
+  cursor: pointer;
+}
+
+.pagination button:disabled {
+  background: #ccc;
+  cursor: not-allowed;
+}
+
+.pagination select {
+  padding: 6px 10px;
+  border-radius: 6px;
+}
+
+table th {
+  font-weight: 600;
+  text-transform: uppercase;
+  font-size: 12px;
+  letter-spacing: 0.5px;
+}
+
+table tr {
+  transition: 0.2s;
+}
+
+table tr:hover {
+  background: #eef3ff;
+}
+
+.table-container {
+  overflow-x: auto;
+}
+
+table {
+  border-collapse: separate;
+  border-spacing: 0 8px;
+}
+
+table tr {
+  background: white;
+  box-shadow: var(--shadow-soft);
+  border-radius: var(--radius);
+}
+
+table td:first-child {
+  border-top-left-radius: var(--radius);
+  border-bottom-left-radius: var(--radius);
+}
+
+table td:last-child {
+  border-top-right-radius: var(--radius);
+  border-bottom-right-radius: var(--radius);
+}
+
+table tr:hover {
+  transform: scale(1.01);
+  transition: var(--transition);
+}

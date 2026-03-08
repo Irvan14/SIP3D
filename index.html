@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>SIP3D - Dashboard</title>
+
+<link rel="icon" href="logo.png">
+
+<link rel="stylesheet" href="css/layout.css">
+<link rel="stylesheet" href="css/theme.css">
+<link rel="stylesheet" href="css/dashboard.css">
+
+<link rel="stylesheet"
+href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+</head>
+
+<body>
+
+<script src="js/auth.js"></script>
+
+<div class="overlay" id="overlay" onclick="closeSidebarMobile()"></div>
+
+<div class="container">
+
+<div id="sidebar"></div>
+
+<main class="main-content page-wrapper">
+
+<div id="topbar"></div>
+
+<div class="cards">
+
+<div class="card">
+<h3>Total Kegiatan</h3>
+<p id="totalKegiatan">0</p>
+</div>
+
+<div class="card">
+<h3>Kegiatan Bulan Ini</h3>
+<p id="kegiatanBulanIni">0</p>
+</div>
+
+<div class="card">
+<h3>Total Dokumen</h3>
+<p id="totalDokumen">0</p>
+</div>
+
+</div>
+
+<div class="dashboard-filter">
+
+<select id="filterTahun">
+<option value="">Semua Tahun</option>
+</select>
+
+<button onclick="exportPDF(this)" class="export-btn">
+<i class="fas fa-file-pdf"></i>
+<span>Export PDF</span>
+</button>
+
+<span id="lastUpdate" class="last-update"></span>
+</div>
+
+<div class="chart-wrapper">
+
+  <div id="chartSkeleton">
+    Loading chart...
+  </div>
+
+  <canvas id="activityChart"></canvas>
+  <div class="recent-activity">
+  <div class="top-lokasi">
+
+  <h3>Top Lokasi Kegiatan</h3>
+
+  <canvas id="lokasiChart"></canvas>
+
+  </div>
+
+  <h3>Kegiatan Terbaru</h3>
+
+  <table class="recent-table">
+    <thead>
+      <tr>
+        <th>Tanggal</th>
+        <th>Jenis</th>
+        <th>Lokasi</th>
+        <th>Tim</th>
+      </tr>
+    </thead>
+
+    <tbody id="recentActivity">
+      <tr>
+        <td colspan="4">Memuat data...</td>
+      </tr>
+    </tbody>
+  </table>
+
+</div>
+</div>
+
+</div>
+
+</main>
+
+</div>
+
+<div id="bottomnav"></div>
+
+<script src="js/api.js"></script>
+<script src="js/layout.js"></script>
+<script src="js/loader.js"></script>
+<script src="js/script.js"></script>
+<script src="js/router.js"></script>
+
+<script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js"></script>
+</body>
+</html>

@@ -1,0 +1,24 @@
+:root {
+  --primary: #4f46e5;
+  --primary-dark: #312e81;
+  --accent: #22d3ee;
+
+  --bg-main: #f8fafc;
+  --bg-glass: rgba(255,255,255,0.6);
+
+  --text-main: #0f172a;
+  --text-light: #64748b;
+
+  --radius: 18px;
+  --radius-lg: 24px;
+
+  --shadow-soft: 0 10px 40px rgba(0,0,0,0.08);
+  --shadow-strong: 0 20px 60px rgba(0,0,0,0.12);
+
+  --transition: all 0.35s cubic-bezier(.4,0,.2,1);
+}
+
+body {
+  background: linear-gradient(135deg,#eef2ff,#f8fafc);
+  color: var(--text-main);
+}

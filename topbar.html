@@ -1,0 +1,26 @@
+<div class="topbar">
+
+  <button class="toggle-btn" onclick="toggleSidebar()">
+    <i class="fas fa-bars"></i>
+  </button>
+
+  <h1 id="pageTitle"></h1>
+
+  <div class="profile-dropdown">
+
+    <div class="profile-trigger" onclick="toggleProfile(event)">
+      <i class="fas fa-user-circle"></i>
+      <span id="loggedUser"></span>
+      <i class="fas fa-chevron-down"></i>
+    </div>
+
+    <div class="profile-menu" id="profileMenu">
+      <a href="#" onclick="logout()">
+        <i class="fas fa-sign-out-alt"></i>
+        Logout
+      </a>
+    </div>
+
+  </div>
+
+</div>
