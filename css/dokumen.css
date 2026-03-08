@@ -1,0 +1,254 @@
+body {
+  background: linear-gradient(135deg,#e0e7ff,#f1f5f9,#f8fafc);
+}
+
+.dokumen-filter{
+  display:flex;
+  gap:15px;
+  margin: 20px 0 40px 0;
+  padding: 20px 25px;
+  border-radius: 18px;
+
+  background: rgba(255,255,255,0.55);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(255,255,255,0.4);
+
+  flex-wrap:wrap;
+}
+
+.dokumen-filter input,
+.dokumen-filter select{
+padding:10px 14px;
+border-radius:10px;
+border:1px solid #e2e8f0;
+background:#fff;
+}
+
+.dokumen-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(280px,1fr));
+  gap:30px;
+}
+
+.dokumen-card{
+  padding:30px 25px;
+  border-radius:20px;
+
+  background: rgba(255,255,255,0.55);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+
+  border:1px solid rgba(255,255,255,0.4);
+  box-shadow: 0 15px 40px rgba(0,0,0,0.08);
+
+  display:flex;
+  flex-direction:column;
+  justify-content:space-between;
+  min-height:380px;
+
+  transition: all 0.35s cubic-bezier(.4,0,.2,1);
+  text-align: center;
+}
+
+.dokumen-card h3{
+  font-size:15px;
+  font-weight:600;
+  margin-bottom:8px;
+  line-height:1.4;
+
+  display:-webkit-box;
+  -webkit-line-clamp:3; /* maksimal 3 baris */
+  -webkit-box-orient:vertical;
+  overflow:hidden;
+}
+
+.dokumen-card:hover{
+  transform:translateY(-8px) scale(1.02);
+  box-shadow: 0 25px 60px rgba(79,70,229,0.25);
+  border:1px solid rgba(79,70,229,0.3);
+}
+
+.dokumen-card:hover .dokumen-icon i{
+  transform: scale(1.1);
+  transition: 0.3s ease;
+}
+
+.dokumen-icon{
+  font-size:70px;       /* lebih besar */
+  color:#dc2626;        /* merah khas PDF */
+  margin-bottom:20px;
+}
+
+.dokumen-icon i{
+  filter: drop-shadow(0 8px 15px rgba(220,38,38,0.3));
+}
+
+.dokumen-card h3{
+font-size:16px;
+margin-bottom:6px;
+}
+
+.badge{
+  display:inline-block;
+  margin-top:10px;
+  padding:6px 14px;
+  border-radius:999px;
+
+  background: rgba(79,70,229,0.15);
+  backdrop-filter: blur(8px);
+
+  color: var(--primary);
+  font-size:12px;
+  font-weight:500;
+}
+
+.btn-lihat{
+  margin-top:auto;
+  padding:12px;
+  border-radius:14px;
+
+  background: linear-gradient(135deg,#4f46e5,#312e81);
+  color:white;
+  font-weight:500;
+  letter-spacing:0.3px;
+
+  box-shadow: 0 8px 25px rgba(79,70,229,0.35);
+
+  transition: all 0.3s ease;
+}
+
+.btn-lihat:hover{
+  transform: translateY(-3px);
+  box-shadow: 0 15px 35px rgba(79,70,229,0.45);
+}
+
+/* ===== CARD ENTRY ANIMATION ===== */
+.dokumen-card{
+  opacity: 0;
+  transform: translateY(25px);
+}
+
+.dokumen-card.show{
+  animation: fadeUp 0.6s cubic-bezier(.4,0,.2,1) forwards;
+}
+
+@keyframes fadeUp{
+  to{
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.topbar{
+  margin-bottom: 20px;
+}
+
+/* ===== EMPTY STATE ===== */
+.empty-state{
+  grid-column: 1 / -1;
+  text-align:center;
+  padding:60px 20px;
+
+  background: rgba(255,255,255,0.6);
+  backdrop-filter: blur(15px);
+  border-radius:20px;
+  border:1px solid rgba(255,255,255,0.4);
+}
+
+.empty-state i{
+  font-size:50px;
+  color: var(--primary);
+  margin-bottom:15px;
+}
+
+.empty-state h3{
+  font-size:18px;
+  margin-bottom:8px;
+}
+
+.empty-state p{
+  font-size:14px;
+  color: var(--text-light);
+}/* ===== EMPTY STATE ===== */
+.empty-state{
+  grid-column: 1 / -1;
+  text-align:center;
+  padding:60px 20px;
+
+  background: rgba(255,255,255,0.6);
+  backdrop-filter: blur(15px);
+  border-radius:20px;
+  border:1px solid rgba(255,255,255,0.4);
+}
+
+.empty-state i{
+  font-size:50px;
+  color: var(--primary);
+  margin-bottom:15px;
+}
+
+.empty-state h3{
+  font-size:18px;
+  margin-bottom:8px;
+}
+
+.empty-state p{
+  font-size:14px;
+  color: var(--text-light);
+}
+
+/* ===== SKELETON LOADING ===== */
+.skeleton-card{
+  padding:30px 25px;
+  border-radius:20px;
+  background: rgba(255,255,255,0.6);
+  backdrop-filter: blur(20px);
+  border:1px solid rgba(255,255,255,0.4);
+  min-height:380px;
+  display:flex;
+  flex-direction:column;
+  gap:15px;
+}
+
+.skeleton{
+  background: linear-gradient(
+    90deg,
+    #e5e7eb 25%,
+    #f3f4f6 50%,
+    #e5e7eb 75%
+  );
+  background-size:200% 100%;
+  animation: shimmer 1.2s infinite;
+  border-radius:8px;
+}
+
+.skeleton.icon{
+  width:60px;
+  height:60px;
+  border-radius:50%;
+  align-self:center;
+}
+
+.skeleton.title{
+  height:18px;
+  width:80%;
+  margin:0 auto;
+}
+
+.skeleton.text{
+  height:14px;
+  width:60%;
+  margin:0 auto;
+}
+
+.skeleton.button{
+  height:40px;
+  width:100%;
+  margin-top:auto;
+  border-radius:12px;
+}
+
+@keyframes shimmer{
+  0% { background-position:-200% 0; }
+  100% { background-position:200% 0; }
+}

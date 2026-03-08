@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Login - SIP3D</title>
+
+<link rel="icon" type="image/png" href="logo.png">
+<link rel="stylesheet" href="css/login.css">
+
+</head>
+
+<body>
+
+<div class="login-container" id="loginBox">
+  <h2>SIP3D LOGIN</h2>
+
+  <div class="input-group">
+    <input type="email" id="email" placeholder="Email" required>
+  </div>
+
+  <div class="input-group">
+    <input type="password" id="password" placeholder="Password" required>
+    <span class="toggle-password" onclick="togglePassword()">👁</span>
+  </div>
+
+  <button id="loginBtn">Login</button>
+  <div id="errorMsg" class="error"></div>
+</div>
+
+<script src="js/login.js"></script>
+
+</body>
+</html>
