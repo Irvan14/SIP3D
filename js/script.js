@@ -1,3 +1,6 @@
+let KEGIATAN_ALL = []
+let currentPage = 1
+let rowsPerPage = 10
 let KEGIATAN_DATA = []
 let chartInstance = null
 let FILTER_TAHUN = ""
@@ -26,35 +29,12 @@ async function loadKegiatan(){
 
   try{
 
-    const data = await getData()
+    KEGIATAN_ALL = await getData()
 
-    const tbody = document.querySelector("#kegiatanTable tbody")
-    if(!tbody) return
-
-    tbody.innerHTML=""
-
-    data.forEach(d=>{
-
-      const tr = document.createElement("tr")
-
-      tr.innerHTML=`
-        <td>${formatTanggal(d.tanggal)}</td>
-        <td>${d.jenis}</td>
-        <td>${d.lokasi}</td>
-        <td>${d.tim}</td>
-        <td>-</td>
-        <td>-</td>
-        <td>${d.input}</td>
-      `
-
-      tbody.appendChild(tr)
-
-    })
+    renderKegiatan()
 
   }catch(err){
-
-    console.error("Load kegiatan gagal",err)
-
+    console.error("Load kegiatan gagal", err)
   }
 
 }
@@ -714,203 +694,66 @@ const preview = document.getElementById("previewFoto")
 if(!form) return
 
 // =========================
-// PREVIEW FOTO
-// =========================
-
-if(fotoInput){
-
-fotoInput.addEventListener("change",function(){
-
-const file = this.files[0]
-if(!file) return
-
-// validasi ukuran 2MB
-if(file.size > 2 * 1024 * 1024){
-alert("Ukuran foto maksimal 2MB")
-this.value=""
-return
-}
-
-preview.src = URL.createObjectURL(file)
-preview.style.display = "block"
-
-})
-
-}
-
-// =========================
 // SUBMIT FORM
 // =========================
 
 form.addEventListener("submit", async function(e){
 
-e.preventDefault()
+  e.preventDefault()
 
-const btn = document.querySelector(".submit-btn")
+  const btn = document.querySelector(".submit-btn")
 
-btn.disabled = true
-btn.innerHTML = "Menyimpan..."
+  btn.disabled = true
+  btn.innerHTML = "Menyimpan..."
 
-try{
+  try{
 
-const formData = new FormData(form)
+    const payload = {
+      mode:"save",
+      tanggal: document.querySelector('[name="tanggal"]').value,
+      jenis: document.querySelector('[name="jenis"]').value,
+      lokasi: document.querySelector('[name="lokasi"]').value,
+      uraian: document.querySelector('[name="uraian"]').value,
+      tim: document.querySelector('[name="tim"]').value
+    }
 
-let fotoURL = ""
+    console.log("PAYLOAD:", payload)
 
-// =========================
-// JIKA ADA FOTO
-// =========================
+    const res = await fetch(API_URL,{
+      method:"POST",
+      headers:{
+        "Content-Type":"text/plain"
+      },
+      body:JSON.stringify(payload)
+    })
 
-const file = fotoInput?.files[0]
+    const text = await res.text()
+    console.log("RAW RESPONSE:", text)
 
-if(file){
+    const result = JSON.parse(text)
 
-// kompres gambar
-const compressed = await compressImage(file,0.7)
+    console.log("RESULT:", result)
 
-// ambil base64
-const base64 = compressed.split(",")[1]
+    if(result.status === "success"){
+      alert("✔ Data berhasil disimpan")
+      form.reset()
+    }else{
+      alert("❌ Gagal menyimpan data")
+    }
 
-// upload foto
-const uploadRes = await fetch(API_URL,{
-method:"POST",
-headers:{
-"Content-Type":"text/plain"
-},
-body:JSON.stringify({
-mode:"upload_foto",
-foto:base64
-})
-})
+  }catch(err){
 
-const uploadResult = await uploadRes.json()
+    console.error(err)
+    alert("❌ Error koneksi server")
 
-if(uploadResult.status !== "success"){
-throw new Error("Upload foto gagal")
-}
+  }
 
-fotoURL = uploadResult.url
-
-}
-
-// =========================
-// SIMPAN DATA KEGIATAN
-// =========================
-
-const payload = {
-
-mode:"save",
-tanggal: formData.get("tanggal"),
-jenis: formData.get("jenis"),
-lokasi: formData.get("lokasi"),
-uraian: formData.get("uraian"),
-tim: formData.get("tim"),
-foto: fotoURL,
-input_oleh:"Admin SIP3D"
-
-}
-
-const res = await fetch(API_URL,{
-method:"POST",
-headers:{
-"Content-Type":"text/plain"
-},
-body:JSON.stringify(payload)
-})
-
-const result = await res.json()
-
-if(result.status === "success"){
-
-alert("✔ Data berhasil disimpan")
-
-form.reset()
-
-if(preview){
-preview.style.display="none"
-preview.src=""
-}
-
-}else{
-
-alert("❌ Gagal menyimpan data")
-
-}
-
-}catch(err){
-
-console.error(err)
-alert("❌ Terjadi error saat upload")
-
-}
-
-btn.disabled = false
-btn.innerHTML = "Simpan"
+  btn.disabled = false
+  btn.innerHTML = "Simpan"
 
 })
 
 })
-
-// =========================
-// PREVIEW FOTO
-// =========================
-
-const fotoInput = document.getElementById("fotoInput")
-const preview = document.getElementById("previewFoto")
-
-let FOTO_BASE64 = ""
-let FOTO_URL = ""
-
-if(fotoInput){
-
-fotoInput.addEventListener("change", async function(){
-
-const file = this.files[0]
-if(!file) return
-
-preview.src = URL.createObjectURL(file)
-preview.style.display = "block"
-
-const reader = new FileReader()
-
-reader.onload = async function(){
-
-FOTO_BASE64 = reader.result.split(",")[1]
-
-// upload foto dulu
-const res = await fetch(API_URL,{
-method:"POST",
-headers:{
-"Content-Type":"text/plain"
-},
-body:JSON.stringify({
-mode:"upload_foto",
-foto:FOTO_BASE64
-})
-})
-
-const result = await res.json()
-
-if(result.status === "success"){
-
-FOTO_URL = result.url
-document.getElementById("fotoURL").value = FOTO_URL
-
-console.log("Foto berhasil upload:", FOTO_URL)
-
-}else{
-
-alert("Upload foto gagal")
-
-}
-
-}
-
-reader.readAsDataURL(file)
-
-})
-
-}
 
 function initInput(){
 console.log("Halaman input aktif")
@@ -965,3 +808,158 @@ reader.readAsDataURL(file)
 })
 
 }
+
+// ===============================
+// LOAD DATA
+// ===============================
+async function loadKegiatan(){
+  try{
+    KEGIATAN_ALL = await getData()
+    renderKegiatan()
+  }catch(err){
+    console.error("Load kegiatan gagal", err)
+  }
+}
+
+// ===============================
+// FILTER DATA
+// ===============================
+function getFilteredData(){
+
+  let data = [...KEGIATAN_ALL]
+
+  // 🔍 SEARCH
+  const keyword = document.getElementById("searchInput")?.value.toLowerCase() || ""
+
+  if(keyword){
+    data = data.filter(d =>
+      (d.lokasi || "").toLowerCase().includes(keyword) ||
+      (d.tim || "").toLowerCase().includes(keyword)
+    )
+  }
+
+  // 🎯 FILTER JENIS
+  const jenis = document.getElementById("filterJenis")?.value
+  if(jenis){
+    data = data.filter(d => d.jenis === jenis)
+  }
+
+  // 📅 FILTER BULAN
+  const bulan = document.getElementById("filterBulan")?.value
+  if(bulan){
+    data = data.filter(d => {
+      const tgl = new Date(d.tanggal)
+      const format = tgl.toISOString().slice(0,7)
+      return format === bulan
+    })
+  }
+
+  return data
+}
+
+// ===============================
+// RENDER TABLE + PAGINATION
+// ===============================
+function renderKegiatan(){
+
+  const tbody = document.querySelector("#kegiatanTable tbody")
+  if(!tbody) return
+
+  tbody.innerHTML = ""
+
+  const filtered = getFilteredData()
+
+  const start = (currentPage - 1) * rowsPerPage
+  const end = start + rowsPerPage
+
+  const data = filtered.slice(start, end)
+
+  data.forEach(d => {
+
+    const tr = document.createElement("tr")
+
+    tr.innerHTML = `
+      <td>${formatTanggal(d.tanggal)}</td>
+      <td>${d.jenis}</td>
+      <td>${d.lokasi}</td>
+      <td>${d.tim}</td>
+      <td>-</td>
+      <td>-</td>
+      <td>${d.input}</td>
+    `
+
+    tbody.appendChild(tr)
+
+  })
+
+  updatePaginationInfo()
+}
+
+// ===============================
+// PAGINATION INFO
+// ===============================
+function updatePaginationInfo(){
+
+  const total = getFilteredData().length
+  const totalPage = Math.ceil(total / rowsPerPage)
+
+  const el = document.getElementById("pageInfo")
+
+  if(el){
+    el.textContent = `Halaman ${currentPage} dari ${totalPage || 1}`
+  }
+}
+
+// ===============================
+// EVENT LISTENER
+// ===============================
+document.addEventListener("DOMContentLoaded",()=>{
+
+  // LOAD DATA
+  if(window.location.pathname.includes("kegiatan.html")){
+    loadKegiatan()
+  }
+
+  // SEARCH
+  document.getElementById("searchInput")?.addEventListener("input", ()=>{
+    currentPage = 1
+    renderKegiatan()
+  })
+
+  // FILTER JENIS
+  document.getElementById("filterJenis")?.addEventListener("change", ()=>{
+    currentPage = 1
+    renderKegiatan()
+  })
+
+  // FILTER BULAN
+  document.getElementById("filterBulan")?.addEventListener("change", ()=>{
+    currentPage = 1
+    renderKegiatan()
+  })
+
+  // DROPDOWN JUMLAH DATA
+  document.getElementById("rowsPerPage")?.addEventListener("change", function(){
+    rowsPerPage = parseInt(this.value)
+    currentPage = 1
+    renderKegiatan()
+  })
+
+  // NEXT
+  document.getElementById("nextPage")?.addEventListener("click", ()=>{
+    if(currentPage * rowsPerPage < getFilteredData().length){
+      currentPage++
+      renderKegiatan()
+    }
+  })
+
+  // PREV
+  document.getElementById("prevPage")?.addEventListener("click", ()=>{
+    if(currentPage > 1){
+      currentPage--
+      renderKegiatan()
+    }
+  })
+
+})
+
